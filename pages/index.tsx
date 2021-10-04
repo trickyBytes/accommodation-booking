@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Icon from '@material-ui/core/Icon';
@@ -10,6 +11,18 @@ import { Container, Grid, Card, CardContent, Typography, CardActions, IconButton
 import MomentUtils from '@date-io/moment';
 import moment from 'moment'
 import '@fontsource/roboto';
+
+interface Accomadation {
+  type: String,
+  arrival: String,
+  departure: String,
+  numberOfNights: Number,
+  priceInPence: Number
+}
+
+interface AvailableAccomadationList {
+  availableAccomadation: Array<Accomadation>
+}
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -70,6 +83,19 @@ export default function Home() {
             </MuiPickersUtilsProvider>
           </FormControl>
           <FormControl className={classes.formControl}>
+            <InputLabel id="accomodation-type-label">Cottages</InputLabel>
+            <Select
+              labelId="accomodation-type-label"
+              id="accomodation-type-select"
+              value={age}
+              onChange={handleChange}
+            >
+              <MenuItem value="{3}">LLaethdy</MenuItem>
+              <MenuItem value="{7}">Poppty</MenuItem>
+              <MenuItem value="{9}">Both</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl className={classes.formControl}>
             <InputLabel id="find-nights-label">Nights</InputLabel>
             <Select
               labelId="find-nights-label"
@@ -99,7 +125,7 @@ export default function Home() {
                 <Typography variant="subtitle2">£320.00</Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label="Book Now">
+                <IconButton aria-label="Book Now" href={"/book/popty"}>
                   <ShopIcon />
                 </IconButton>
               </CardActions>
@@ -114,7 +140,7 @@ export default function Home() {
                 <Typography variant="subtitle2">£320.00</Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label="Book Now">
+                <IconButton aria-label="Book Now" href={"/book/popty"}>
                   <ShopIcon />
                 </IconButton>
               </CardActions>
@@ -150,7 +176,24 @@ export default function Home() {
 export async function getStaticProps() {
   return {
     props: {
-
+      accomodation: AvailableAccomadationList = {
+        availableAccomadation: [
+          {
+            type: "Popty",
+            arrival: "Friday 16th July",
+            departure: "Monday 19th of July",
+            numberOfNights: 3,
+            priceInPence: 3200.00
+          },
+          {
+            type: "LLeathdy",
+            arrival: "Friday 16th July",
+            departure: "Monday 19th of July",
+            numberOfNights: 3,
+            priceInPence: 3200.00
+          }
+        ]
+      }
     }
   }
 }
