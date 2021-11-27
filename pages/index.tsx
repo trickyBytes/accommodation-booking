@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import Link from "next/link";
-import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ShopIcon from "@material-ui/icons/Shop";
 import {
   MuiPickersUtilsProvider,
@@ -30,12 +25,12 @@ import { GetStaticProps } from "next";
 import { InferGetStaticPropsType } from "next";
 
 interface Accomadation {
-  id: Number;
+  key: Number;
+  id: String;
   type: String;
   arrival: String;
   departure: String;
-  numberOfNights: Number;
-  priceInPence: Number;
+  priceInPence: Number
 }
 
 interface AvailableAccomadationList {
@@ -58,12 +53,20 @@ const useStyles = makeStyles((theme) => ({
 export const getStaticProps: GetStaticProps = async () => {
   const availableAccommadation: Accomadation[] = [
     {
-      id: 1,
-      type: "Popty",
+      key: 1,
+      id: "y-popty",
+      type: "Y Popty (sleeps 6)",
       arrival: "Friday 16th July",
       departure: "Monday 19th of July",
-      numberOfNights: 3,
       priceInPence: 3200.0,
+    },
+    {
+      key: 2,
+      id: "laethdy",
+      type: "Laethdy (sleeps 4)",
+      arrival: "Friday 16th July",
+      departure: "Monday 19th of July",
+      priceInPence: 2200.0,
     },
   ];
 
@@ -124,19 +127,6 @@ export default function Home({
             </MuiPickersUtilsProvider>
           </FormControl>
           <FormControl className={classes.formControl}>
-            <InputLabel id="accomodation-type-label">Cottages</InputLabel>
-            <Select
-              labelId="accomodation-type-label"
-              id="accomodation-type-select"
-              value={age}
-              onChange={handleChange}
-            >
-              <MenuItem value="{3}">LLaethdy</MenuItem>
-              <MenuItem value="{7}">Poppty</MenuItem>
-              <MenuItem value="{9}">Both</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
             <InputLabel id="find-nights-label">Nights</InputLabel>
             <Select
               labelId="find-nights-label"
@@ -159,53 +149,25 @@ export default function Home({
           alignItems="center"
         >
           {availableAccommadation.map((accommadation: Accomadation) => (
-            <Grid item xs={3} key={accommadation.id}>
+            <Grid item xs={3} key={accommadation.key}>
               <Card>
                 <CardContent>
                   <Typography variant="h6">{accommadation.type}</Typography>
                   <Typography variant="subtitle2">
                     {accommadation.arrival} to {accommadation.departure}
                   </Typography>
-                  <Typography variant="body2">
-                    {accommadation.numberOfNights}
-                  </Typography>
                   <Typography variant="subtitle2">
-                    {accommadation.priceInPence}
+                    £{accommadation.priceInPence}
                   </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                  <IconButton aria-label="Book Now" href={"/book/popty"}>
+                  <IconButton aria-label="Book Now" href={"/book/"+accommadation.id}>
                     <ShopIcon />
                   </IconButton>
                 </CardActions>
               </Card>
             </Grid>
           ))}
-
-          <Grid
-            container
-            spacing={2}
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Grid item>
-              <Button
-                variant="contained"
-                color="default"
-                className={classes.button}
-                startIcon={<ArrowBackIcon />}
-              ></Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                color="default"
-                className={classes.button}
-                endIcon={<ArrowForwardIcon />}
-              ></Button>
-            </Grid>
-          </Grid>
         </Grid>
       </Grid>
     </Container>
