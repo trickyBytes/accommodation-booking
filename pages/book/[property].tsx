@@ -10,16 +10,23 @@ import {
   CardActions,
   IconButton,
   FormControlLabel,
+  FormGroup,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
   Switch,
+  Paper,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  button: {
-    margin: theme.spacing(1),
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
   },
   formControl: {
     margin: theme.spacing(1),
@@ -36,45 +43,64 @@ function Book() {
 
   const classes = useStyles();
 
-  const handleChange = (event) => {
-    console.log(event);
+  const [age, setAge] = React.useState('');
+  // const [state, setState] = React.useState({
+  //   requireHotTub: false
+  // });
+
+  // const handleChange = (event) => {
+  //   setState({ ...state, [event.target.name]: event.target.checked });
+  // };
+
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setAge(event.target.value as string);
   };
 
   return (
-    <Container>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        spacing={3}
-      >
-        <br />
-        {property} Booking Page
-        <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label">Number of Pets</InputLabel>
+    <Grid
+      container
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      spacing={3}
+    >
+      <Grid item xs={12}>
+        <Paper>{property} Booking Page</Paper>
+      </Grid>
+      <Grid item xs={12}>
+        <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel id="demo-simple-select-outlined-label">Pets</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            // value={age}
-            label="NumberOfPets"
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={age}
             onChange={handleChange}
+            label="Pets"
           >
-            <MenuItem value={0}>0</MenuItem>
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
             <MenuItem value={1}>1</MenuItem>
             <MenuItem value={2}>2</MenuItem>
           </Select>
         </FormControl>
-        <FormControl>
-          <FormControlLabel
-            control={<Switch defaultChecked />}
-            label="Hot Tub"
-          />
-        </FormControl>
-        <div>Deposit</div>
-        <div>Total</div>
       </Grid>
-    </Container>
+      {/* <Grid item xs={12}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={state.requireHotTub}
+              onChange={handleChange}
+              name="requireHotTub"
+              color="primary"
+            />
+          }
+          label="Hot Tub"
+        />
+      </Grid> */}
+      <div>Deposit</div>
+      <div>Total</div>
+    </Grid>
   );
 }
 
