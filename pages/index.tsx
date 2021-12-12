@@ -1,8 +1,12 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Copyright from "../src/Copyright";
+import { format } from "date-fns";
+
+import { Accommodation } from "../types";
 
 //Arrival Date
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -10,7 +14,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 
-//Number of nighs
+//Number of nights
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -20,52 +24,24 @@ import Select from "@mui/material/Select";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 
-//Stuff for getting dynamic data
-import { GetStaticProps } from "next";
-import { InferGetStaticPropsType } from "next";
+export default function Index() {
+  const [results, setResults] = useState([]);
+  const [arrivalDate, setArrivalDate] = useState(null);
+  const [nights, setNights] = useState("");
 
-interface Accommodation {
-  id: String;
-  type: String;
-  arrival: String;
-  departure: String;
-  priceInPence: Number;
-}
+  useEffect(() => {
+    if (arrivalDate && nights) findProperties(arrivalDate, nights);
+  }, [arrivalDate, nights]);
 
-export const getStaticProps: GetStaticProps = async () => {
-  const availableAccommadation: Accommodation[] = [
-    {
-      id: "y-popty",
-      type: "Y Popty (sleeps 6)",
-      arrival: "Friday 16th July",
-      departure: "Monday 19th of July",
-      priceInPence: 3200.0,
-    },
-    {
-      id: "laethdy",
-      type: "Laethdy (sleeps 4)",
-      arrival: "Friday 16th July",
-      departure: "Monday 19th of July",
-      priceInPence: 2200.0,
-    },
-  ];
+  async function findProperties(arrivalDate, nights) {
+    const query = `date=${ format(arrivalDate, "MM-dd-yyyy") }&numberOfNigts=${nights}`;
 
-  return {
-    props: {
-      availableAccommadation,
-    },
-  };
-};
-
-export default function Index({
-  availableAccommadation,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
-  const [value, setValue] = React.useState(null);
-  const [age, setAge] = React.useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+    fetch(`/api/availability?=${query}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setResults(res);
+      });
+  }
 
   return (
     <Container maxWidth="sm">
@@ -77,10 +53,8 @@ export default function Index({
           <DatePicker
             disablePast
             label="Arrival Date"
-            value={value}
-            onChange={(newValue) => {
-              setValue(newValue);
-            }}
+            value={arrivalDate}
+            onChange={(e) => setArrivalDate(e)}
             renderInput={(params) => <TextField {...params} />}
           />
           <FormControl fullWidth>
@@ -90,9 +64,9 @@ export default function Index({
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={age}
+              value={nights}
               label="Number of nights"
-              onChange={handleChange}
+              onChange={(e) => setNights(e.target.value)}
             >
               <MenuItem value={4}>4</MenuItem>
               <MenuItem value={7}>7</MenuItem>
@@ -104,7 +78,7 @@ export default function Index({
         <Box
           sx={{ display: "grid", gridTemplateRows: "repeat(3, 1fr)", gap: 2 }}
         >
-          {availableAccommadation.map((accommodation: Accommodation) => (
+          {results.map((accommodation: Accommodation) => (
             <Card key={accommodation.id}>
               <CardContent>
                 <Typography variant="h6">{accommodation.type}</Typography>
