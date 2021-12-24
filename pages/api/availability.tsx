@@ -8,17 +8,19 @@ export default function handler(
   res.status(200).json([
     {
       id: "y-popty",
-      type: "Y Popty (sleeps 6)",
-      arrival: "Friday 16th July",
-      departure: "Monday 19th of July",
-      priceInPence: 3200.0,
+      type: "Y Popty",
+      sleeps: 6,
+      arrival: new Date(2021,12,6),
+      departure: new Date(2021,12,10),
+      priceInPence: 32000,
     },
     {
       id: "laethdy",
-      type: "Laethdy (sleeps 4)",
-      arrival: "Friday 16th July",
-      departure: "Monday 19th of July",
-      priceInPence: 2200.0,
+      type: "Laethdy",
+      sleeps: 4,
+      arrival: new Date(2021,12,6),
+      departure: new Date(2021,12,10),
+      priceInPence: 22000,
     },
   ]);
 }

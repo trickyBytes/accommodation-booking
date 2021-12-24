@@ -29,12 +29,17 @@ export default function Index() {
   const [arrivalDate, setArrivalDate] = useState(null);
   const [nights, setNights] = useState("");
 
+  const currenyFormat = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
+
   useEffect(() => {
     if (arrivalDate && nights) findProperties(arrivalDate, nights);
   }, [arrivalDate, nights]);
 
   async function findProperties(arrivalDate, nights) {
-    const query = `date=${ format(arrivalDate, "MM-dd-yyyy") }&numberOfNigts=${nights}`;
+    const query = `date=${format(
+      arrivalDate,
+      "MM-dd-yyyy"
+    )}&numberOfNigts=${nights}`;
 
     fetch(`/api/availability?=${query}`)
       .then((res) => res.json())
@@ -81,13 +86,13 @@ export default function Index() {
           {results.map((accommodation: Accommodation) => (
             <Card key={accommodation.id}>
               <CardContent>
-                <Typography variant="h6">{accommodation.type}</Typography>
+                <Typography variant="h6">
+                  {accommodation.type} (sleeps {accommodation.sleeps})
+                </Typography>
                 <Typography variant="subtitle2">
                   {accommodation.arrival} to {accommodation.departure}
                 </Typography>
-                <Typography variant="subtitle2">
-                  £{accommodation.priceInPence}
-                </Typography>
+                <Typography variant="subtitle2">{currenyFormat.format(accommodation.priceInPence/100)}</Typography>
               </CardContent>
             </Card>
           ))}

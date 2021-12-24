@@ -1,7 +1,8 @@
 export interface Accommodation {
-  id: String;
-  type: String;
-  arrival: String;
-  departure: String;
-  priceInPence: Number;
+  id: string;
+  type: string;
+  sleeps: number;
+  arrival: Date;
+  departure: Date;
+  priceInPence: number;
 }
