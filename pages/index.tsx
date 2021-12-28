@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Copyright from "../src/Copyright";
 import { format } from "date-fns";
 
-import { Accommodation } from "../types";
+import { AccommodationAvailability, Accommodation } from "../types";
 
 //Arrival Date
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -83,16 +83,16 @@ export default function Index() {
         <Box
           sx={{ display: "grid", gridTemplateRows: "repeat(3, 1fr)", gap: 2 }}
         >
-          {results.map((accommodation: Accommodation) => (
-            <Card key={accommodation.id}>
+          {results.map((availability: AccommodationAvailability) => (
+            <Card key={availability.accommodation.id}>
               <CardContent>
                 <Typography variant="h6">
-                  {accommodation.type} (sleeps {accommodation.sleeps})
+                  {availability.accommodation.name} (sleeps {availability.accommodation.sleeps})
                 </Typography>
                 <Typography variant="subtitle2">
-                  {accommodation.arrival} to {accommodation.departure}
+                  {availability.arrival} to {availability.departure}
                 </Typography>
-                <Typography variant="subtitle2">{currenyFormat.format(accommodation.priceInPence/100)}</Typography>
+                <Typography variant="subtitle2">{currenyFormat.format(availability.priceInPence/100)}</Typography>
               </CardContent>
             </Card>
           ))}
