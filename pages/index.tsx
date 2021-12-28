@@ -36,12 +36,12 @@ export default function Index() {
   }, [arrivalDate, nights]);
 
   async function findProperties(arrivalDate, nights) {
-    const query = `date=${format(
+    const query = `arrivalDate=${format(
       arrivalDate,
-      "MM-dd-yyyy"
-    )}&numberOfNigts=${nights}`;
+      "MM/dd/yyyy"
+    )}&nights=${nights}`;
 
-    fetch(`/api/availability?=${query}`)
+    fetch(`http://localhost:8080/availability?${query}`)
       .then((res) => res.json())
       .then((res) => {
         setResults(res);
